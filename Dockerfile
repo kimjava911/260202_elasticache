@@ -1,0 +1,27 @@
+# [Stage 1] Build: Gradle을 사용하여 JAR 파일 생성
+FROM gradle:jdk17-noble AS builder
+WORKDIR /build
+
+# 현재 소스복사 및 빌드
+
+# 의존성 캐싱
+COPY build.gradle settings.gradle gradlew ./
+COPY gradle gradle
+RUN chmod +x gradlew
+RUN ./gradlew dependencies --no-daemon
+
+COPY . .
+RUN ./gradlew bootJar --no-daemon
+
+# [Stage 2] Run: 실행만을 위한 경량 JRE 환경
+FROM azul/zulu-openjdk-alpine:17-jre
+WORKDIR /app
+
+# 빌드 스테이지에서 생성된 JAR 파일만 가져옴
+COPY --from=builder /build/build/libs/*.jar app.jar
+
+# [추가] 운영 환경 프로필 내장
+ENV SPRING_PROFILES_ACTIVE=prod
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]

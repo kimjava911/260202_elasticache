@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  data:
+    redis:
+      url: <*.serverless.*.cache.amazonaws.com:6379>
+
+jwt:
+  secret: # openssl rand -hex 64
+  access-token-validity-in-seconds: 1800 # 30 minutes
+  refresh-token-validity-in-seconds: 604800 # 7 days
+  header: Authorization
+  cookie:
+    access-token-name: accessToken
+    refresh-token-name: refreshToken

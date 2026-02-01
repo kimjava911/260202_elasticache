@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>마이 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .token-box {
+            word-break: break-all;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">마이 페이지</h3>
+            <span class="badge bg-primary" th:text="${appName}">App Name</span>
+        </div>
+        <div class="card-body">
+            <p class="lead">인증된 사용자만 접근 가능한 보안 페이지입니다.</p>
+
+            <h4 class="mt-4 mb-3">사용자 정보</h4>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <th scope="row" class="bg-light" style="width: 20%">아이디</th>
+                    <td><span sec:authentication="name"></span></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="bg-light">권한</th>
+                    <td><span sec:authentication="principal.authorities"></span></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="bg-light">상세 정보</th>
+                    <td><span sec:authentication="principal"></span></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h4 class="mt-4 mb-3">토큰 정보</h4>
+            <div class="mb-3">
+                <strong>액세스 토큰:</strong>
+                <div class="token-box mt-2" th:text="${accessToken != null ? accessToken : '없음'}"></div>
+            </div>
+            <div class="mb-3">
+                <strong>리프레시 토큰:</strong>
+                <div class="token-box mt-2" th:text="${refreshToken != null ? refreshToken : '없음'}"></div>
+            </div>
+
+            <div class="mt-4">
+                <a th:href="@{/}" class="btn btn-secondary">홈으로</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

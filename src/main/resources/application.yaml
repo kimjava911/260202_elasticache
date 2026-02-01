@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: elasticache
+  profiles:
+    # 활성화할 프로파일 설정 (dev: 개발 환경, prod: 운영 환경)
+    active: dev
+
+app:
+  name: ${APP_NAME:elasticache-instance}
