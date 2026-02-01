@@ -20,13 +20,12 @@ spring:
     redis:
       # Redis 접속 URL. 환경변수 REDIS_URL로 설정
       url: ${REDIS_URL}
-      port: ${REDIS_PORT:6379}
 
 jwt:
   # JWT 서명에 사용할 비밀키. 환경변수 JWT_SECRET으로 반드시 설정 필요
   secret: ${JWT_SECRET}
-  # Access Token 유효 시간 (초). 기본값 1800초 (30분)
-  access-token-validity-in-seconds: ${JWT_ACCESS_TOKEN_VALIDITY:1800}
+  # Access Token 유효 시간 (초). 기본값 60초 (1분)
+  access-token-validity-in-seconds: ${JWT_ACCESS_TOKEN_VALIDITY:60}
   # Refresh Token 유효 시간 (초). 기본값 604800초 (7일)
   refresh-token-validity-in-seconds: ${JWT_REFRESH_TOKEN_VALIDITY:604800}
   # JWT 토큰을 담을 헤더 이름. 기본값 Authorization
