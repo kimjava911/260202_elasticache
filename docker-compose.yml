@@ -6,17 +6,42 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - app-1
-      - app-2
+      # app-1과 app-2가 healthy 상태가 될 때까지 기다린 후 nginx 시작
+      app-1:
+        condition: service_healthy
+      app-2:
+        condition: service_healthy
 
   app-1:
     image: elasticache:latest
     env_file: .env
     environment:
       - APP_NAME=elasticache-instance-1
+    healthcheck:
+      # wget을 사용하여 헬스 체크 (curl 대신 사용)
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      # 10초 간격으로 헬스 체크 수행
+      interval: 10s
+      # 5초 내에 응답이 없으면 실패로 간주
+      timeout: 5s
+      # 5회 연속 실패 시 unhealthy 상태로 전환
+      retries: 5
+      # 컨테이너 시작 후 30초 동안은 헬스 체크 실패를 무시 (애플리케이션 부팅 시간 고려)
+      start_period: 30s
 
   app-2:
     image: elasticache:latest
     env_file: .env
     environment:
       - APP_NAME=elasticache-instance-2
+    healthcheck:
+      # wget을 사용하여 헬스 체크 (curl 대신 사용)
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      # 10초 간격으로 헬스 체크 수행
+      interval: 10s
+      # 5초 내에 응답이 없으면 실패로 간주
+      timeout: 5s
+      # 5회 연속 실패 시 unhealthy 상태로 전환
+      retries: 5
+      # 컨테이너 시작 후 30초 동안은 헬스 체크 실패를 무시 (애플리케이션 부팅 시간 고려)
+      start_period: 30s

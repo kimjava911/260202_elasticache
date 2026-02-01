@@ -31,6 +31,13 @@
             <label for="nickname">닉네임</label>
         </div>
 
+        <div class="form-check mb-3 text-start">
+            <input class="form-check-input" type="checkbox" value="true" id="admin" name="admin">
+            <label class="form-check-label" for="admin">
+                관리자 계정으로 가입
+            </label>
+        </div>
+
         <button class="btn btn-primary w-100 py-2" type="submit">가입하기</button>
         <div class="mt-3">
             <a th:href="@{/login}" class="text-decoration-none">로그인 하러가기</a>

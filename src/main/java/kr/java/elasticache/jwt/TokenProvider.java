@@ -55,8 +55,18 @@ public class TokenProvider {
         long now = (new Date()).getTime();
         Date validity = new Date(now + jwtProperties.getRefreshTokenValidityInSeconds() * 1000);
 
+        // Refresh Token에는 권한 정보(auth claim)를 포함하지 않음 (또는 필요 시 포함)
+        // 여기서는 Access Token 재발급 시 권한 정보를 DB 등에서 다시 조회하거나,
+        // Refresh Token에도 권한 정보를 포함해야 함.
+        // 현재 로직상 getAuthentication에서 claims.get(AUTHORITIES_KEY)를 호출하므로 포함해야 함.
+        
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
         return Jwts.builder()
                 .subject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities) // 권한 정보 추가
                 .signWith(key)
                 .expiration(validity)
                 .compact();

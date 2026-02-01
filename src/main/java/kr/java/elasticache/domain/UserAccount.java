@@ -28,10 +28,9 @@ public class UserAccount {
 
     private boolean activated;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authorityName")})
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "authority_name")
     private Set<Authority> authorities;
 }

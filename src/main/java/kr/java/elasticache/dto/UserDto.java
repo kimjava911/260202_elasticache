@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import kr.java.elasticache.domain.UserAccount;
 import lombok.*;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Getter
 @Setter
 @Builder
@@ -20,6 +17,8 @@ public class UserDto {
     private String password;
 
     private String nickname;
+
+    private boolean admin; // 관리자 여부
 
     public static UserDto from(UserAccount user) {
         if(user == null) return null;

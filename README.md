@@ -18,7 +18,7 @@ docker build -t ghcr.io/${GH_USER}/elasticache:latest .
 # linux/amd64와 linux/arm64 플랫폼을 모두 지원하도록 빌드합니다.
 docker buildx build --platform linux/amd64,linux/arm64 -t elasticache:latest .
 
-docker tag elasticache:latest ghcr.io/${GH_USER}/elasticache:latest .
+docker tag elasticache:latest ghcr.io/${GH_USER}/elasticache:latest
 ```
 
 ```sh
@@ -99,4 +99,15 @@ echo $CR_TOKEN | docker login ghcr.io -u $GH_USER --password-stdin
 
 ```sh
 git clone <github repo>
+# password 요청 시 PAT
+cd <repo name>
+cp .env.sample .env
+vi .env
+```
+
+```sh
+docker pull ghcr.io/${GH_USER}/elasticache:latest
+docker tag ghcr.io/${GH_USER}/elasticache:latest elasticache:latest
+docker compose up -d
+# docker compose down && docker compose up -d
 ```

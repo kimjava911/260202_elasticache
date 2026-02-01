@@ -20,6 +20,7 @@ spring:
     redis:
       # Redis 접속 URL. 환경변수 REDIS_URL로 설정
       url: ${REDIS_URL}
+      port: ${REDIS_PORT:6379}
 
 jwt:
   # JWT 서명에 사용할 비밀키. 환경변수 JWT_SECRET으로 반드시 설정 필요

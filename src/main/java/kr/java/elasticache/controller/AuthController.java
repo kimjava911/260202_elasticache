@@ -2,10 +2,12 @@ package kr.java.elasticache.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import kr.java.elasticache.config.JwtProperties;
+import kr.java.elasticache.domain.RefreshToken;
 import kr.java.elasticache.dto.LoginDto;
 import kr.java.elasticache.dto.UserDto;
 import kr.java.elasticache.jwt.CookieUtils;
 import kr.java.elasticache.jwt.TokenProvider;
+import kr.java.elasticache.repository.RefreshTokenRepository;
 import kr.java.elasticache.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,7 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtProperties jwtProperties;
     private final UserService userService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @PostMapping("/authenticate")
     public String authorize(@ModelAttribute LoginDto loginDto, HttpServletResponse response) {
@@ -41,6 +43,12 @@ public class AuthController {
 
         String accessToken = tokenProvider.createAccessToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
+
+        // Redis에 Refresh Token 저장
+        refreshTokenRepository.save(RefreshToken.builder()
+                .username(authentication.getName())
+                .token(refreshToken)
+                .build());
 
         CookieUtils.addCookie(response, jwtProperties.getCookie().getAccessTokenName(), accessToken, jwtProperties.getAccessTokenValidityInSeconds());
         CookieUtils.addCookie(response, jwtProperties.getCookie().getRefreshTokenName(), refreshToken, jwtProperties.getRefreshTokenValidityInSeconds());

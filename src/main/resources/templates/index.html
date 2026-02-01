@@ -25,6 +25,10 @@
                 <p class="card-text">안녕하세요, <strong sec:authentication="name">사용자</strong>님!</p>
                 <div class="d-grid gap-2 d-md-block">
                     <a th:href="@{/my-page}" class="btn btn-info text-white">마이 페이지</a>
+
+                    <!-- 관리자 권한이 있는 경우에만 표시 -->
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}" class="btn btn-warning text-dark">관리자 대시보드</a>
+
                     <form th:action="@{/logout}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-danger">로그아웃</button>
                     </form>

@@ -12,13 +12,17 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  sql:
+    init:
+      mode: always
   data:
     redis:
-      url: <*.serverless.*.cache.amazonaws.com:6379>
+      # https://console.aiven.io/
+      url: rediss://
 
 jwt:
   secret: # openssl rand -hex 64
-  access-token-validity-in-seconds: 1800 # 30 minutes
+  access-token-validity-in-seconds: 60 # 1 minutes
   refresh-token-validity-in-seconds: 604800 # 7 days
   header: Authorization
   cookie:

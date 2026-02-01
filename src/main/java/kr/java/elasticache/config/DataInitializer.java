@@ -28,16 +28,12 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initAdminUser() {
-        Authority adminAuthority = Authority.builder()
-                .authorityName("ROLE_ADMIN")
-                .build();
-
         UserAccount adminUser = UserAccount.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("admin1234")) // 비밀번호 암호화
                 .nickname("관리자")
                 .activated(true)
-                .authorities(Collections.singleton(adminAuthority))
+                .authorities(Collections.singleton(Authority.ROLE_ADMIN))
                 .build();
 
         userRepository.save(adminUser);
